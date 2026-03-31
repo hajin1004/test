@@ -3,42 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUCKY 6:4 BOX</title>
+    <title>VIP LUCKY BOX</title>
     <style>
-        body { background: #000 url('https://raw.githubusercontent.com/hajin1004/abc/main/bg.png') no-repeat center center; background-size: cover; color: #fff; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; position: relative; }
-        body::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 0; }
-        .container { text-align: center; padding: 20px; width: 100%; max-width: 400px; z-index: 1; }
-        .lucky-btn { 
-            background: linear-gradient(45deg, #f4c20d, #bf953f); 
-            color: #000; border: none; padding: 25px 0; width: 100%; 
-            font-size: 26px; font-weight: bold; border-radius: 15px; 
-            cursor: pointer; box-shadow: 0 0 25px rgba(244, 194, 13, 0.4);
-            transition: 0.3s; animation: pulse 1.5s infinite;
+        /* [디자인] 전반적인 분위기를 두 번째 코드의 레드 톤으로 변경 */
+        body { 
+            background: #000 url('https://raw.githubusercontent.com/hajin1004/abc/main/bg.png') no-repeat center center; 
+            background-size: cover; color: #fff; font-family: -apple-system, sans-serif; 
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; 
+            position: relative; 
         }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+        /* 배경 어둡기 조절 (두 번째 코드 스타일) */
+        body::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 0; }
+        
+        .container { text-align: center; padding: 20px; width: 100%; max-width: 400px; z-index: 1; }
+        
+        /* [디자인 변경] 버튼을 금색에서 빨간색 VIP 스타일로 변경 */
+        .lucky-btn { 
+            background: linear-gradient(45deg, #ff0000, #8b0000); /* 레드 그라디언트 */
+            color: #fff; border: none; padding: 25px 0; width: 100%; 
+            font-size: 26px; font-weight: bold; border-radius: 15px; 
+            cursor: pointer; 
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); /* 빨간색 네온 효과 */
+            transition: 0.3s; 
+            animation: pulse 1.2s infinite; /* 약간 더 빠른 애니메이션 */
+        }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        /* [기능 유지] 로딩 영역 스타일은 첫 번째 코드 유지 (색상은 레드에 맞춰 변경) */
         #loading-area { display: none; margin-top: 25px; }
-        .loader { border: 4px solid #333; border-top: 4px solid #f4c20d; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto; }
+        .loader { border: 4px solid #333; border-top: 4px solid #ff0000; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* [기능 유지] 영상 오버레이 스타일은 첫 번째 코드 유지 */
         .video-overlay { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 100; }
         .video-guard { position: absolute; inset: 0; z-index: 101; background: rgba(0,0,0,0); }
         video { width: 100%; height: 100%; object-fit: contain; }
-        .info { margin-top: 35px; color: #888; font-size: 13px; line-height: 1.6; }
+        
+        /* [디자인 변경] 하단 안내 문구 색상 및 간격 변경 */
+        .info { margin-top: 30px; color: #ccc; font-size: 14px; line-height: 1.6; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div id="main-content" class="container">
-        <h1 style="margin-bottom: 45px; color: #f4c20d; text-shadow: 0 0 10px rgba(244,194,13,0.3);">🎰 LUCKY BOX</h1>
-        <button id="main-btn" class="lucky-btn" onclick="startLucky()"> 🎁 OPEN </button>
+        <h1 style="margin-bottom: 40px; color: #ff0000; text-shadow: 0 0 15px #ff0000;">🎁 LUCKY BOX</h1>
+        
+        <button id="main-btn" class="lucky-btn" onclick="startLucky()"> 🔓 상자 열기 </button>
         
         <div id="loading-area">
             <div class="loader"></div>
-            <p style="margin-top:15px; color:#f4c20d; font-weight: bold;">행운의 상자를 확인 중...</p>
+            <p style="margin-top:15px; color:#ff0000; font-weight: bold;">보안 연결 확인 중...</p>
         </div>
 
         <div class="info">
             오늘의 시크릿 행운을 확인하세요!<br>
-            <small style="opacity: 0.6;">이 포스팅은 쿠팡 파트너스 활동의 일환으로 수수료를 제공받을 수 있습니다.</small>
+            <small style="opacity: 0.5;">본 페이지는 성인 인증 및 보안 연결을 지원합니다.</small>
+            <br><br>
+            <small style="opacity: 0.4;">이 포스팅은 쿠팡 파트너스 활동의 일환으로 수수료를 제공받을 수 있습니다.</small>
         </div>
     </div>
 
@@ -48,6 +70,9 @@
     </div>
 
 <script>
+/******************************************************************************
+ * [기능] 첫 번째 코드의 스크립트 로직을 절대로 건드리지 않고 그대로 유지합니다.
+ ******************************************************************************/
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzX9e1zAJYeh1TLuuiqw-D--eeL6gZcRNW0Kzqf2dXzFxZtqx05dWV6sRkUxqSRxNX6/exec";
 
 function checkLimit() {
@@ -106,7 +131,6 @@ function startLucky() {
             video.onended = stopAndClose;
             video.onerror = () => { alert("로드 실패! 다시 시도합니다."); resetUI(); };
         } else {
-            // 수정: 버튼 노출 없이 즉시 현재 창에서 광고 이동
             window.location.href = data.url;
         }
     })
@@ -119,8 +143,9 @@ function startLucky() {
 function resetUI() {
     const btn = document.getElementById("main-btn");
     btn.style.display = "block";
-    btn.innerHTML = "🎁 OPEN";
-    btn.style.background = "linear-gradient(45deg, #f4c20d, #bf953f)";
+    btn.innerHTML = "🔓 상자 열기"; // 디자인에 맞춰 문구 수정
+    // 디자인 변경: 리셋 시 버튼 배경색도 레드 계열로 유지
+    btn.style.background = "linear-gradient(45deg, #ff0000, #8b0000)"; 
     btn.onclick = startLucky;
     document.getElementById("loading-area").style.display = "none";
 }
