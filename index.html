@@ -130,11 +130,10 @@
             justify-content: center;
         }
 
-        /* ⚠️ 핵심 수정: video-guard를 제거하거나 숨깁니다 */
         .video-container {
             position: relative;
             width: 100%;
-            height: 100%; /* 구글 드라이브 화면이 전체를 차지하게 설정 */
+            height: 100%;
             background: #000;
         }
 
@@ -150,6 +149,7 @@
             transform: translate(-50%, -50%);
             color: var(--gold);
             font-weight: bold;
+            z-index: 101; /* 영상보다 앞에 보이게 설정 */
         }
     </style>
 </head>
@@ -173,13 +173,13 @@
 
     <div class="overlay" id="overlay">
         <div class="video-container" id="videoContainer">
-            <div class="loading">콘텐츠 로딩 중...</div>
+            <div class="loading" id="loadingText">콘텐츠 로딩 중...</div>
             <iframe id="videoFrame" allow="autoplay"></iframe>
         </div>
     </div>
 
     <script>
-        // ⚠️ 사용자님의 구글 앱스 스크립트 배포 주소로 교체하세요!
+        // 사용자님의 앱스 스크립트 주소 유지
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxbFAxud3p_aLN7kNYLl9W4EHAeNJujayH0KBHMVVXqFzMBBP72YvqicGb6_kHi_64y/exec";
 
         let isProcessing = false;
@@ -191,9 +191,11 @@
             const lid = document.getElementById('lid');
             const overlay = document.getElementById('overlay');
             const frame = document.getElementById('videoFrame');
+            const loadingText = document.getElementById('loadingText');
 
-            // 1. 상자 애니메이션
+            // 1. 상자 애니메이션 및 로딩 문구 초기화
             lid.style.transform = "translateY(-100px) rotate(-20deg) scale(1.1)";
+            loadingText.style.display = 'block'; 
             
             try {
                 // 2. GAS에서 데이터 가져오기
@@ -201,11 +203,16 @@
                 const data = await response.json();
 
                 if (data.type === "video") {
-                    // 영상인 경우: iframe에 주소 삽입
+                    // 영상 주소 삽입
                     frame.src = data.url;
                     overlay.style.display = 'flex';
+
+                    // ★ 핵심 수정: iframe 로드가 완료되면 로딩 글자 숨기기
+                    frame.onload = function() {
+                        loadingText.style.display = 'none';
+                    };
+
                 } else if (data.type === "ad") {
-                    // 광고인 경우: 쿠팡 링크로 이동
                     window.location.href = data.url;
                 }
             } catch (e) {
