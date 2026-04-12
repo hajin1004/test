@@ -2,161 +2,218 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VIP LUCKY BOX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* [디자인] 전반적인 분위기를 두 번째 코드의 레드 톤으로 변경 */
-        body { 
-            background: #000 url('https://raw.githubusercontent.com/hajin1004/abc/main/bg.png') no-repeat center center; 
-            background-size: cover; color: #fff; font-family: -apple-system, sans-serif; 
-            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; 
-            position: relative; 
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #ffdf00;
+            --vip-red: #8b0000;
+            --dark-bg: #0a0a0a;
         }
-        /* 배경 어둡기 조절 (두 번째 코드 스타일) */
-        body::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 0; }
-        
-        .container { text-align: center; padding: 20px; width: 100%; max-width: 400px; z-index: 1; }
-        
-        /* [디자인 변경] 버튼을 금색에서 빨간색 VIP 스타일로 변경 */
-        .lucky-btn { 
-            background: linear-gradient(45deg, #ff0000, #8b0000); /* 레드 그라디언트 */
-            color: #fff; border: none; padding: 25px 0; width: 100%; 
-            font-size: 26px; font-weight: bold; border-radius: 15px; 
-            cursor: pointer; 
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); /* 빨간색 네온 효과 */
-            transition: 0.3s; 
-            animation: pulse 1.2s infinite; /* 약간 더 빠른 애니메이션 */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            background-color: var(--dark-bg);
+            font-family: 'Noto Sans KR', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
+
+        /* 배경 효과 */
+        .bg-effect {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #2a0000 0%, #0a0a0a 100%);
+            z-index: -1;
+        }
+
+        .container { text-align: center; z-index: 1; width: 100%; max-width: 400px; padding: 20px; }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
-        /* [기능 유지] 로딩 영역 스타일은 첫 번째 코드 유지 (색상은 레드에 맞춰 변경) */
-        #loading-area { display: none; margin-top: 25px; }
-        .loader { border: 4px solid #333; border-top: 4px solid #ff0000; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* [기능 유지] 영상 오버레이 스타일은 첫 번째 코드 유지 */
-        .video-overlay { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 100; }
-        .video-guard { position: absolute; inset: 0; z-index: 101; background: rgba(0,0,0,0); }
-        video { width: 100%; height: 100%; object-fit: contain; }
-        
-        /* [디자인 변경] 하단 안내 문구 색상 및 간격 변경 */
-        .info { margin-top: 30px; color: #ccc; font-size: 14px; line-height: 1.6; }
+        .title {
+            font-weight: 900;
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle { font-size: 1rem; color: #ccc; margin-bottom: 40px; }
+
+        /* 선물 상자 디자인 */
+        .box-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 50px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .box-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--vip-red) 0%, #4a0000 100%);
+            border: 4px solid var(--gold);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.5);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .box-lid {
+            position: absolute;
+            top: -10%; left: -5%; width: 110%; height: 30%;
+            background: linear-gradient(135deg, #a00000 0%, var(--vip-red) 100%);
+            border: 4px solid var(--gold);
+            border-radius: 10px;
+            z-index: 2;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .box-ribbon-v {
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 100%;
+            background: linear-gradient(to right, var(--gold-bright), var(--gold), var(--gold-bright));
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .vip-badge {
+            position: relative;
+            background: var(--dark-bg);
+            color: var(--gold);
+            padding: 10px 15px;
+            border: 2px solid var(--gold);
+            font-weight: 900;
+            font-size: 1.5rem;
+            border-radius: 5px;
+            z-index: 3;
+        }
+
+        /* 버튼 디자인 */
+        .open-btn {
+            background: linear-gradient(to bottom, var(--gold-bright), var(--gold));
+            color: #000;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            transition: all 0.2s;
+            width: 80%;
+        }
+
+        .open-btn:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); }
+
+        /* 결과 오버레이 (영상이 나타나는 곳) */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: none;
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ⚠️ 핵심 수정: video-guard를 제거하거나 숨깁니다 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%; /* 구글 드라이브 화면이 전체를 차지하게 설정 */
+            background: #000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--gold);
+            font-weight: bold;
+        }
     </style>
 </head>
-<body oncontextmenu="return false;">
-
-    <div id="main-content" class="container">
-        <h1 style="margin-bottom: 40px; color: #ff0000; text-shadow: 0 0 15px #ff0000;">🎁 LUCKY BOX</h1>
-        
-        <button id="main-btn" class="lucky-btn" onclick="startLucky()"> 🔓 상자 열기 </button>
-        
-        <div id="loading-area">
-            <div class="loader"></div>
-            <p style="margin-top:15px; color:#ff0000; font-weight: bold;">보안 연결 확인 중...</p>
-        </div>
-
-        <div class="info">
-            오늘의 시크릿 행운을 확인하세요!<br>
-            <small style="opacity: 0.5;">본 페이지는 성인 인증 및 보안 연결을 지원합니다.</small>
-            <br><br>
-            <small style="opacity: 0.4;">이 포스팅은 쿠팡 파트너스 활동의 일환으로 수수료를 제공받을 수 있습니다.</small>
-        </div>
-    </div>
-
-    <div id="video-overlay" class="video-overlay">
-        <div class="video-guard"></div>
-        <video id="v" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload"></video>
-    </div>
-
-<script>
-/******************************************************************************
- * [기능] 첫 번째 코드의 스크립트 로직을 절대로 건드리지 않고 그대로 유지합니다.
- ******************************************************************************/
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzX9e1zAJYeh1TLuuiqw-D--eeL6gZcRNW0Kzqf2dXzFxZtqx05dWV6sRkUxqSRxNX6/exec";
-
-function checkLimit() {
-    const today = new Date().toDateString();
-    const lastDate = localStorage.getItem('lastDate');
+<body>
+    <div class="bg-effect"></div>
     
-    if (lastDate !== today) {
-        const randomLimit = Math.floor(Math.random() * 4) + 7; 
-        localStorage.setItem('lastDate', today);
-        localStorage.setItem('dailyLimit', randomLimit);
-        localStorage.setItem('clickCount', '0');
-    }
+    <div class="container">
+        <h1 class="title">VIP BOX</h1>
+        <p class="subtitle">PREMIUM CONTENT ONLY</p>
 
-    let limit = parseInt(localStorage.getItem('dailyLimit')) || 7;
-    let count = parseInt(localStorage.getItem('clickCount')) || 0;
+        <div class="box-wrapper" onclick="startLucky()">
+            <div class="box-lid" id="lid"></div>
+            <div class="box-body" id="body">
+                <div class="box-ribbon-v"></div>
+                <div class="vip-badge">VIP</div>
+            </div>
+        </div>
 
-    if (count >= limit) {
-        alert("오늘의 모든 상자를 열었습니다! 내일 다시 참여해주세요.");
-        const adLinks = [
-            "https://link.coupang.com/a/dLXD5X",
-            "https://link.coupang.com/a/dN4QKg",
-            "https://link.coupang.com/a/dN4R06"
-        ];
-        window.location.href = adLinks[Math.floor(Math.random() * adLinks.length)];
-        return false;
-    }
+        <button class="open-btn" onclick="startLucky()">상자 열기</button>
+    </div>
 
-    localStorage.setItem('clickCount', count + 1);
-    return true;
-}
+    <div class="overlay" id="overlay">
+        <div class="video-container" id="videoContainer">
+            <div class="loading">콘텐츠 로딩 중...</div>
+            <iframe id="videoFrame" allow="autoplay"></iframe>
+        </div>
+    </div>
 
-function startLucky() {
-    if (!checkLimit()) return;
+    <script>
+        // ⚠️ 사용자님의 구글 앱스 스크립트 배포 주소로 교체하세요!
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwYy_z8U3FmS2V-x_6U6_P2_Xz_새주소/exec";
 
-    const btn = document.getElementById("main-btn");
-    const loading = document.getElementById("loading-area");
-    const video = document.getElementById("v");
-    const overlay = document.getElementById("video-overlay");
+        let isProcessing = false;
 
-    btn.style.display = "none";
-    loading.style.display = "block";
+        async function startLucky() {
+            if (isProcessing) return;
+            isProcessing = true;
 
-    fetch(GAS_URL + "?t=" + Date.now())
-    .then(res => res.json())
-    .then(data => {
-        loading.style.display = "none";
-        
-        if (data.type === "video") {
-            video.src = data.url;
-            video.onloadeddata = () => {
-                overlay.style.display = "flex";
-                video.muted = true;
-                video.play().catch(e => console.log("Play failed", e));
-                setTimeout(() => { video.muted = false; }, 5000);
-            };
-            video.onended = stopAndClose;
-            video.onerror = () => { alert("로드 실패! 다시 시도합니다."); resetUI(); };
-        } else {
-            window.location.href = data.url;
+            const lid = document.getElementById('lid');
+            const overlay = document.getElementById('overlay');
+            const frame = document.getElementById('videoFrame');
+
+            // 1. 상자 애니메이션
+            lid.style.transform = "translateY(-100px) rotate(-20deg) scale(1.1)";
+            
+            try {
+                // 2. GAS에서 데이터 가져오기
+                const response = await fetch(GAS_URL);
+                const data = await response.json();
+
+                if (data.type === "video") {
+                    // 영상인 경우: iframe에 주소 삽입
+                    frame.src = data.url;
+                    overlay.style.display = 'flex';
+                } else if (data.type === "ad") {
+                    // 광고인 경우: 쿠팡 링크로 이동
+                    window.location.href = data.url;
+                }
+            } catch (e) {
+                alert("네트워크 연결을 확인해주세요.");
+                lid.style.transform = "none";
+                isProcessing = false;
+            }
         }
-    })
-    .catch(() => {
-        alert("서버 연결이 지연되고 있습니다.");
-        resetUI();
-    });
-}
-
-function resetUI() {
-    const btn = document.getElementById("main-btn");
-    btn.style.display = "block";
-    btn.innerHTML = "🔓 상자 열기"; // 디자인에 맞춰 문구 수정
-    // 디자인 변경: 리셋 시 버튼 배경색도 레드 계열로 유지
-    btn.style.background = "linear-gradient(45deg, #ff0000, #8b0000)"; 
-    btn.onclick = startLucky;
-    document.getElementById("loading-area").style.display = "none";
-}
-
-function stopAndClose() {
-    const video = document.getElementById("v");
-    video.pause(); 
-    video.src = "";
-    document.getElementById("video-overlay").style.display = "none";
-    resetUI();
-}
-</script>
+    </script>
 </body>
 </html>
